@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  # Postgres
+  db:
+    image: postgres
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    expose:
+      - 5433
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
+
+  web:
+    build: .
+    command: ["./run_web.sh"]
+    volumes:
+      - .:/webapps
+    ports:
+      - "8000:8000"
+    links:
+      - db
+    depends_on:
+      - db
